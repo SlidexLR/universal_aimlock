@@ -10,13 +10,12 @@ local aimlockEnabled = false
 local wallCheckEnabled = false
 local teamCheckEnabled = false
 local espEnabled = false
-local frameVisible = true
 
 -- Create GUI
 local screenGui = Instance.new("ScreenGui")
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 100)
-frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+frame.Size = UDim2.new(0, 250, 0, 150)
+frame.Position = UDim2.new(0.5, -125, 0.5, -75)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.Parent = screenGui
 
@@ -26,8 +25,22 @@ titleLabel.Text = "Aimlock Script"
 titleLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 
+local aimlockLabel = Instance.new("TextLabel", frame)
+aimlockLabel.Size = UDim2.new(1, 0, 0, 30)
+aimlockLabel.Position = UDim2.new(0, 0, 0.2, 0)
+aimlockLabel.Text = "Aimlock: Disabled"
+aimlockLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+aimlockLabel.TextColor3 = Color3.new(1, 1, 1)
+
+local espLabel = Instance.new("TextLabel", frame)
+espLabel.Size = UDim2.new(1, 0, 0, 30)
+espLabel.Position = UDim2.new(0, 0, 0.4, 0)
+espLabel.Text = "ESP: Disabled"
+espLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+espLabel.TextColor3 = Color3.new(1, 1, 1)
+
 screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
-frame.Visible = frameVisible
+frame.Visible = true
 
 -- Notification Function
 local function notify(title, text)
@@ -90,10 +103,14 @@ UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if not gameProcessedEvent then  -- Check if the game has processed this input
         if input.KeyCode == Enum.KeyCode.M then  -- Set to M key for GUI toggle
             frame.Visible = not frame.Visible  -- Toggle GUI visibility
-            frameVisible = frame.Visible
         elseif input.KeyCode == Enum.KeyCode.Q then  -- Set to Q key for aimlock toggle
             aimlockEnabled = not aimlockEnabled
+            aimlockLabel.Text = "Aimlock: " .. (aimlockEnabled and "Enabled" or "Disabled")
             notify("Aimlock", aimlockEnabled and "Enabled" or "Disabled")
+        elseif input.KeyCode == Enum.KeyCode.E then  -- Set to E key for ESP toggle
+            espEnabled = not espEnabled
+            espLabel.Text = "ESP: " .. (espEnabled and "Enabled" or "Disabled")
+            notify("ESP", espEnabled and "Enabled" or "Disabled")
         end
     end
 end)
@@ -116,16 +133,6 @@ RunService.RenderStepped:Connect(function()
             if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 createESP(player)
             end
-        end
-    end
-end)
-
--- Enable ESP toggle with a key (for example, press E)
-UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-    if not gameProcessedEvent then
-        if input.KeyCode == Enum.KeyCode.E then
-            espEnabled = not espEnabled
-            notify("ESP", espEnabled and "Enabled" or "Disabled")
         end
     end
 end)
