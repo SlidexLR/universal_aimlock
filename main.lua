@@ -3,51 +3,55 @@ local espEnabled = false
 local tracersEnabled = false
 local teamCheckEnabled = true
 local wallCheckEnabled = true
-local targetModel = nil
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
-local guiService = game:GetService("StarterGui")
 local runService = game:GetService("RunService")
 local userInputService = game:GetService("UserInputService")
-
--- Display a notification that the script is running
-guiService:SetCore("SendNotification", {
-    Title = "Aimlock Script";
-    Text = "Script is now running!";
-    Duration = 5;
-})
+local guiService = game:GetService("StarterGui")
 
 -- Create GUI for toggling features
 local screenGui = Instance.new("ScreenGui", player.PlayerGui)
-local aimlockButton = Instance.new("TextButton", screenGui)
-local espButton = Instance.new("TextButton", screenGui)
-local tracersButton = Instance.new("TextButton", screenGui)
-local teamCheckButton = Instance.new("TextButton", screenGui)
-local wallCheckButton = Instance.new("TextButton", screenGui)
+screenGui.Name = "AimlockGui"
+local frame = Instance.new("Frame", screenGui)
+frame.Size = UDim2.new(0, 200, 0, 300)
+frame.Position = UDim2.new(0.5, -100, 0.5, -150)
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+frame.BorderSizePixel = 0
+frame.Visible = false  -- Initially hide the GUI
 
--- Styling the buttons
-aimlockButton.Size = UDim2.new(0, 100, 0, 50)
-aimlockButton.Position = UDim2.new(0, 10, 0, 10)
+local toggleGuiButton = Instance.new("TextButton", screenGui)
+toggleGuiButton.Size = UDim2.new(0, 200, 0, 50)
+toggleGuiButton.Position = UDim2.new(0.5, -100, 0, 10)
+toggleGuiButton.Text = "Toggle GUI"
+toggleGuiButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+
+local aimlockButton = Instance.new("TextButton", frame)
+aimlockButton.Size = UDim2.new(1, 0, 0, 50)
+aimlockButton.Position = UDim2.new(0, 0, 0, 50)
 aimlockButton.Text = "Aimlock (Q)"
 aimlockButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
 
-espButton.Size = UDim2.new(0, 100, 0, 50)
-espButton.Position = UDim2.new(0, 10, 0, 70)
+local espButton = Instance.new("TextButton", frame)
+espButton.Size = UDim2.new(1, 0, 0, 50)
+espButton.Position = UDim2.new(0, 0, 0, 100)
 espButton.Text = "ESP (P)"
 espButton.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
 
-tracersButton.Size = UDim2.new(0, 100, 0, 50)
-tracersButton.Position = UDim2.new(0, 10, 0, 130)
+local tracersButton = Instance.new("TextButton", frame)
+tracersButton.Size = UDim2.new(1, 0, 0, 50)
+tracersButton.Position = UDim2.new(0, 0, 0, 150)
 tracersButton.Text = "Tracers (T)"
 tracersButton.BackgroundColor3 = Color3.fromRGB(85, 255, 85)
 
-teamCheckButton.Size = UDim2.new(0, 120, 0, 50)
-teamCheckButton.Position = UDim2.new(0, 10, 0, 190)
+local teamCheckButton = Instance.new("TextButton", frame)
+teamCheckButton.Size = UDim2.new(1, 0, 0, 50)
+teamCheckButton.Position = UDim2.new(0, 0, 0, 200)
 teamCheckButton.Text = "Team Check (C)"
 teamCheckButton.BackgroundColor3 = Color3.fromRGB(255, 170, 0)
 
-wallCheckButton.Size = UDim2.new(0, 120, 0, 50)
-wallCheckButton.Position = UDim2.new(0, 10, 0, 250)
+local wallCheckButton = Instance.new("TextButton", frame)
+wallCheckButton.Size = UDim2.new(1, 0, 0, 50)
+wallCheckButton.Position = UDim2.new(0, 0, 0, 250)
 wallCheckButton.Text = "Wall Check (W)"
 wallCheckButton.BackgroundColor3 = Color3.fromRGB(170, 85, 255)
 
@@ -96,6 +100,38 @@ espButton.MouseButton1Click:Connect(function()
         Text = espEnabled and "ESP Enabled" or "ESP Disabled";
         Duration = 2;
     })
+end)
+
+tracersButton.MouseButton1Click:Connect(function()
+    tracersEnabled = not tracersEnabled
+    guiService:SetCore("SendNotification", {
+        Title = "Tracers";
+        Text = tracersEnabled and "Tracers Enabled" or "Tracers Disabled";
+        Duration = 2;
+    })
+end)
+
+teamCheckButton.MouseButton1Click:Connect(function()
+    teamCheckEnabled = not teamCheckEnabled
+    guiService:SetCore("SendNotification", {
+        Title = "Team Check";
+        Text = teamCheckEnabled and "Team Check Enabled" or "Team Check Disabled";
+        Duration = 2;
+    })
+end)
+
+wallCheckButton.MouseButton1Click:Connect(function()
+    wallCheckEnabled = not wallCheckEnabled
+    guiService:SetCore("SendNotification", {
+        Title = "Wall Check";
+        Text = wallCheckEnabled and "Wall Check Enabled" or "Wall Check Disabled";
+        Duration = 2;
+    })
+end)
+
+-- Function to toggle GUI visibility
+toggleGuiButton.MouseButton1Click:Connect(function()
+    frame.Visible = not frame.Visible
 end)
 
 -- Key input for toggling aimlock
